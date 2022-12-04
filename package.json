@@ -1,0 +1,24 @@
+{
+  "name": "node-red-contrib-labview",
+  "version": "1.0.0",
+  "description": "Node-RED Integration Toolkit for LabVIEW",
+  "node-red": {
+    "nodes": {
+      "labview-io": "labview-io.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SRIRAM301090/node-red-contrib-labview.git"
+  },
+  "keywords": [
+    "Node-RED",
+    "LabVIEW"
+  ],
+  "author": "Sriram Gopalan",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/SRIRAM301090/node-red-contrib-labview/issues"
+  },
+  "homepage": "https://github.com/SRIRAM301090/node-red-contrib-labview#readme"
+}
