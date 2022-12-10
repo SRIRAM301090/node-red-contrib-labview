@@ -28,3 +28,27 @@
         <input type="text" id="node-config-input-port">
     </div>
 </script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('lv-input',{
+        category: 'network',
+        defaults: {
+            lvConfig: {value:"", type:"lv-config"},
+            topic: {value:"",required:true},
+        },
+        label: function() {
+            return this.topic;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="lv-input">
+    <div class="form-row">
+        <label for="node-input-lvConfig"><i class="fa fa-bookmark"></i> Config</label>
+        <input type="text" id="node-input-lvConfig">
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-bookmark"></i> Topic</label>
+        <input type="text" id="node-input-topic">
+    </div>
+</script>
