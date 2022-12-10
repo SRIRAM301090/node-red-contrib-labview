@@ -2,17 +2,22 @@
     RED.nodes.registerType('lv-config',{
         category: 'config',
         defaults: {
+            name: {value:"", required: true},
             listeningPort: {value:1234,required:true,validate:RED.validators.number()},
             host: {value:"localhost",required:true},
             port: {value:1234,required:true,validate:RED.validators.number()},
         },
         label: function() {
-            return this.host+":"+this.port;
+            return this.name;
         }
     });
 </script>
 
 <script type="text/html" data-template-name="lv-config">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-bookmark"></i> Name</label>
+        <input type="text" id="node-config-input-name">
+    </div>
     <p>LabVIEW in</p>
     <div class="form-row">
         <label for="node-config-input-listeningPort"><i class="fa fa-bookmark"></i> Port</label>
@@ -31,14 +36,18 @@
 
 <script type="text/javascript">
     RED.nodes.registerType('lv-input',{
-        category: 'network',
+        category: 'LabVIEW',
         defaults: {
             lvConfig: {value:"", type:"lv-config"},
             topic: {value:"",required:true},
         },
         label: function() {
             return this.topic;
-        }
+        },        
+        inputs:0,
+        outputs:1,
+        icon: "bridge-dash.svg",
+        align: "left",
     });
 </script>
 
