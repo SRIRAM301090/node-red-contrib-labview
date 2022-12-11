@@ -55,7 +55,7 @@ module.exports = function (RED) {
           node.send(msg);
         });
       } catch (err) {
-        console.log("ErrorMessage",err);
+        console.log("ErrorMessage", err);
         node.error(err);
       }
     }
@@ -65,4 +65,38 @@ module.exports = function (RED) {
     });
   }
   RED.nodes.registerType("labview-input", labviewInput);
+
+  function labviewOutput(n) {
+    RED.nodes.createNode(this, n);
+    let node = this;
+    this.topic = n.topic;
+    this.labviewConfig = RED.nodes.getNode(n.labviewConfig);
+    const host = this.labviewConfig.host;
+    const port = this.labviewConfig.port;
+
+    client = udp.createSocket("udp4");
+    console.log("client", client);
+
+    this.on("input", function (msg, send, done) {
+      if (this.labviewConfig) {
+        try {
+          msg.topic = this.topic;
+          const bufferData = Buffer(JSON.stringify(msg));
+          
+          //sending msg
+          client.send(bufferData, port, host, function (error) {
+            if (error) {
+              client.close();
+            } else {
+              done();
+            }
+          });
+        } catch (err) {
+          console.log("ErrorMessage", err);
+          done(err);
+        }
+      }
+    });
+  }
+  RED.nodes.registerType("labview-output", labviewOutput);
 };

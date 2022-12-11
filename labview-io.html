@@ -67,3 +67,32 @@
         <input type="text" id="node-input-format">
     </div>
 </script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('labview-output',{
+        category: 'LabVIEW',
+        defaults: {
+            labviewConfig: {value:"", type:"labview-config"},
+            topic: {value:"",required:true},
+        },
+        label: function() {
+            return this.topic||"LabVIEW Output";;
+        },        
+        inputs:1,
+        outputs:0,
+        color: "#ffdd22",
+        icon: "LV.png",
+        align: "right",
+    });
+</script>
+
+<script type="text/html" data-template-name="labview-output">
+    <div class="form-row">
+        <label for="node-input-labviewConfig"><i class="fa fa-bookmark"></i> Config</label>
+        <input type="text" id="node-input-labviewConfig">
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-bookmark"></i> Topic</label>
+        <input type="text" id="node-input-topic">
+    </div>
+</script>
