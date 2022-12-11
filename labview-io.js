@@ -29,21 +29,27 @@ module.exports = function (RED) {
 
   function labviewInput(n) {
     RED.nodes.createNode(this, n);
-    var node = this;
+    let node = this;
     this.topic = n.topic;
+    this.format = n.format;
     this.labviewConfig = RED.nodes.getNode(n.labviewConfig);
-    var msg = {};
+    let msg = {};
+
+    let form =
+      this.format.replace(/{{/g, "").replace(/}}/g, "").replace(/\s/g, "") ||
+      "_zzz_zzz_zzz_";
+    form = form.split("|")[0];
 
     if (this.labviewConfig) {
       eventEmitter.removeAllListeners(this.topic);
-      eventEmitter.addListener(this.topic, function(data) {
-        msg.payload = data.message;
+      eventEmitter.addListener(this.topic, function (data) {
+        msg.payload = RED.util.getMessageProperty(data, form);
         node.send(msg);
-    })
+      });
     }
 
     node.on("close", function () {
-      eventEmitter.removeListener(this.topic)
+      eventEmitter.removeListener(this.topic);
     });
   }
   RED.nodes.registerType("labview-input", labviewInput);

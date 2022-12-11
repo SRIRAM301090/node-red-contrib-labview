@@ -3,9 +3,9 @@
         category: 'config',
         defaults: {
             name: {value:"", required: true},
-            listeningPort: {value:1234,required:true,validate:RED.validators.number()},
+            listeningPort: {value:61557,required:true,validate:RED.validators.number()},
             host: {value:"localhost",required:true},
-            port: {value:1234,required:true,validate:RED.validators.number()},
+            port: {value:61556,required:true,validate:RED.validators.number()},
         },
         label: function() {
             return this.name;
@@ -40,6 +40,7 @@
         defaults: {
             labviewConfig: {value:"", type:"labview-config"},
             topic: {value:"",required:true},
+            format: {value:"{{msg.payload}}",required:true}
         },
         label: function() {
             return this.topic||"LabVIEW Input";;
@@ -60,5 +61,9 @@
     <div class="form-row">
         <label for="node-input-topic"><i class="fa fa-bookmark"></i> Topic</label>
         <input type="text" id="node-input-topic">
+    </div>
+    <div class="form-row">
+        <label for="node-input-format"><i class="fa fa-bookmark"></i> Payload</label>
+        <input type="text" id="node-input-format">
     </div>
 </script>
