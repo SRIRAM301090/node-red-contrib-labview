@@ -3,7 +3,7 @@ module.exports = function (RED) {
   const events = require("events");
   const eventEmitter = new events.EventEmitter();
 
-  function lvConfig(n) {
+  function labviewConfig(n) {
     RED.nodes.createNode(this, n);
     this.listeningPort = n.listeningPort;
     this.host = n.host;
@@ -25,16 +25,16 @@ module.exports = function (RED) {
       console.log("Socket is closed !");
     });
   }
-  RED.nodes.registerType("lv-config", lvConfig);
+  RED.nodes.registerType("labview-config", labviewConfig);
 
-  function lvInput(n) {
+  function labviewInput(n) {
     RED.nodes.createNode(this, n);
     var node = this;
     this.topic = n.topic;
-    this.lvConfig = RED.nodes.getNode(n.lvConfig);
+    this.labviewConfig = RED.nodes.getNode(n.labviewConfig);
     var msg = {};
 
-    if (this.lvConfig) {
+    if (this.labviewConfig) {
       eventEmitter.removeAllListeners(this.topic);
       eventEmitter.addListener(this.topic, function(data) {
         msg.payload = data.message;
@@ -46,5 +46,5 @@ module.exports = function (RED) {
       eventEmitter.removeListener(this.topic)
     });
   }
-  RED.nodes.registerType("lv-input", lvInput);
+  RED.nodes.registerType("labview-input", labviewInput);
 };

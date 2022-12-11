@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('lv-config',{
+    RED.nodes.registerType('labview-config',{
         category: 'config',
         defaults: {
             name: {value:"", required: true},
@@ -13,7 +13,7 @@
     });
 </script>
 
-<script type="text/html" data-template-name="lv-config">
+<script type="text/html" data-template-name="labview-config">
     <div class="form-row">
         <label for="node-config-input-name"><i class="fa fa-bookmark"></i> Name</label>
         <input type="text" id="node-config-input-name">
@@ -35,10 +35,10 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('lv-input',{
+    RED.nodes.registerType('labview-input',{
         category: 'LabVIEW',
         defaults: {
-            lvConfig: {value:"", type:"lv-config"},
+            labviewConfig: {value:"", type:"labview-config"},
             topic: {value:"",required:true},
         },
         label: function() {
@@ -51,7 +51,7 @@
     });
 </script>
 
-<script type="text/html" data-template-name="lv-input">
+<script type="text/html" data-template-name="labview-input">
     <div class="form-row">
         <label for="node-input-lvConfig"><i class="fa fa-bookmark"></i> Config</label>
         <input type="text" id="node-input-lvConfig">
