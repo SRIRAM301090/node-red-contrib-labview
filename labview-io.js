@@ -1,7 +1,8 @@
 module.exports = function (RED) {
   const udp = require("dgram");
   const events = require("events");
-  const eventEmitter = new events.EventEmitter();
+  const serverEmitter = new events.EventEmitter();
+  const clientEmittter = new events.EventEmitter();
 
   function labviewConfig(n) {
     RED.nodes.createNode(this, n);
@@ -20,7 +21,7 @@ module.exports = function (RED) {
         server.on("message", function (msg, info) {
           const payload = JSON.parse(msg.toString());
           console.log(payload);
-          eventEmitter.emit(payload.topic, payload);
+          serverEmitter.emit(payload.topic, payload);
         });
 
         //emits after the socket is closed using socket.close();
@@ -30,6 +31,26 @@ module.exports = function (RED) {
       } catch (err) {
         node.error(err);
       }
+    }
+
+    // creating a udp client
+    const client = udp.createSocket("udp4");
+    if (n.host && n.port) {
+      console.log(n.host, n.port);
+      clientEmittter.removeAllListeners("toClient");
+      clientEmittter.addListener("toClient", function (data) {
+        try {
+          //sending msg
+          client.send(data, n.port, n.host, function (error) {
+            if (error) {
+              client.close();
+            }
+          });
+        } catch (err) {
+          console.log("ErrorMessage", err);
+          node.error(err);
+        }
+      });
     }
   }
   RED.nodes.registerType("labview-config", labviewConfig);
@@ -49,8 +70,8 @@ module.exports = function (RED) {
 
     if (this.labviewConfig) {
       try {
-        eventEmitter.removeAllListeners(this.topic);
-        eventEmitter.addListener(this.topic, function (data) {
+        serverEmitter.removeAllListeners(this.topic);
+        serverEmitter.addListener(this.topic, function (data) {
           msg.payload = RED.util.getMessageProperty(data, form);
           node.send(msg);
         });
@@ -61,7 +82,7 @@ module.exports = function (RED) {
     }
 
     node.on("close", function () {
-      eventEmitter.removeListener(this.topic);
+      serverEmitter.removeListener(this.topic);
     });
   }
   RED.nodes.registerType("labview-input", labviewInput);
@@ -71,28 +92,13 @@ module.exports = function (RED) {
     let node = this;
     this.topic = n.topic;
     this.labviewConfig = RED.nodes.getNode(n.labviewConfig);
-    const host = this.labviewConfig.host;
-    const port = this.labviewConfig.port;
 
-    client = udp.createSocket("udp4");
     this.on("input", function (msg, send, done) {
       if (this.labviewConfig) {
-        try {
-          msg.topic = this.topic;
-          const bufferData = Buffer(JSON.stringify(msg));
-          
-          //sending msg
-          client.send(bufferData, port, host, function (error) {
-            if (error) {
-              client.close();
-            } else {
-              done();
-            }
-          });
-        } catch (err) {
-          console.log("ErrorMessage", err);
-          done(err);
-        }
+        msg.topic = this.topic;
+        console.log("toClient", msg);
+        const bufferData = Buffer(JSON.stringify(msg));
+        clientEmittter.emit("toClient", bufferData);
       }
     });
   }

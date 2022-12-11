@@ -16,7 +16,7 @@
     "LabVIEW"
   ],
   "author": "Sriram Gopalan",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/SRIRAM301090/node-red-contrib-labview/issues"
   },
