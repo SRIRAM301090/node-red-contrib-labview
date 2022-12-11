@@ -75,8 +75,6 @@ module.exports = function (RED) {
     const port = this.labviewConfig.port;
 
     client = udp.createSocket("udp4");
-    console.log("client", client);
-
     this.on("input", function (msg, send, done) {
       if (this.labviewConfig) {
         try {
