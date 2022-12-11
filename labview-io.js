@@ -5,13 +5,15 @@ module.exports = function (RED) {
 
   function lvConfig(n) {
     RED.nodes.createNode(this, n);
-
     this.listeningPort = n.listeningPort;
     this.host = n.host;
     this.port = n.port;
 
+    // creating a udp server
     const server = udp.createSocket("udp4");
     server.bind(this.listeningPort);
+
+    // emits on new datagram msg
     server.on("message", function (msg, info) {
       const payload = JSON.parse(msg.toString());
       console.log(payload);
@@ -31,7 +33,6 @@ module.exports = function (RED) {
     this.topic = n.topic;
     this.lvConfig = RED.nodes.getNode(n.lvConfig);
     var msg = {};
-    console.log(this.lvConfig);
 
     if (this.lvConfig) {
       eventEmitter.removeAllListeners(this.topic);
