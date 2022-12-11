@@ -42,19 +42,20 @@
             topic: {value:"",required:true},
         },
         label: function() {
-            return this.topic;
+            return this.topic||"LabVIEW Input";;
         },        
         inputs:0,
         outputs:1,
-        icon: "bridge-dash.svg",
+        color: "#ffdd22",
+        icon: "LVNXG.png",
         align: "left",
     });
 </script>
 
 <script type="text/html" data-template-name="labview-input">
     <div class="form-row">
-        <label for="node-input-lvConfig"><i class="fa fa-bookmark"></i> Config</label>
-        <input type="text" id="node-input-lvConfig">
+        <label for="node-input-labviewConfig"><i class="fa fa-bookmark"></i> Config</label>
+        <input type="text" id="node-input-labviewConfig">
     </div>
     <div class="form-row">
         <label for="node-input-topic"><i class="fa fa-bookmark"></i> Topic</label>
