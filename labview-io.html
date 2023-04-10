@@ -1,13 +1,13 @@
 <script type="text/javascript">
-    RED.nodes.registerType('labview-config',{
+    RED.nodes.registerType('labview-config', {
         category: 'config',
         defaults: {
-            name: {value:"", required: true},
-            listeningPort: {value:61557,required:true,validate:RED.validators.number()},
-            host: {value:"localhost",required:true},
-            port: {value:61556,required:true,validate:RED.validators.number()},
+            name: { value: "", required: true },
+            listeningPort: { value: 61557, required: true, validate: RED.validators.number() },
+            host: { value: "localhost", required: true },
+            port: { value: 61556, required: true, validate: RED.validators.number() },
         },
-        label: function() {
+        label: function () {
             return this.name;
         }
     });
@@ -18,12 +18,14 @@
         <label for="node-config-input-name"><i class="fa fa-bookmark"></i> Name</label>
         <input type="text" id="node-config-input-name">
     </div>
-    <p>LabVIEW in</p>
+    <hr>
+    <p style="font-weight: bold;">LabVIEW In Settings:</p>
     <div class="form-row">
         <label for="node-config-input-listeningPort"><i class="fa fa-bookmark"></i> Port</label>
         <input type="text" id="node-config-input-listeningPort">
     </div>
-    <p>LabVIEW Out</p>
+    <hr>
+    <p style="font-weight: bold;">LabVIEW Out Settings:</p>
     <div class="form-row">
         <label for="node-config-input-host"><i class="fa fa-bookmark"></i> Host</label>
         <input type="text" id="node-config-input-host">
@@ -32,21 +34,22 @@
         <label for="node-config-input-port"><i class="fa fa-bookmark"></i> Port</label>
         <input type="text" id="node-config-input-port">
     </div>
+    <hr>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('labview-input',{
+    RED.nodes.registerType('labview-input', {
         category: 'LabVIEW',
         defaults: {
-            labviewConfig: {value:"", type:"labview-config"},
-            topic: {value:"",required:true},
-            format: {value:"{{msg.payload}}",required:true}
+            labviewConfig: { value: "", type: "labview-config" },
+            topic: { value: "", required: true },
+            format: { value: "{{msg.payload}}", required: true }
         },
-        label: function() {
-            return this.topic||"LabVIEW Input";;
-        },        
-        inputs:0,
-        outputs:1,
+        label: function () {
+            return this.topic || "LabVIEW Input";;
+        },
+        inputs: 0,
+        outputs: 1,
         color: "#ffdd22",
         icon: "LV.png",
         align: "left",
@@ -69,17 +72,17 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('labview-output',{
+    RED.nodes.registerType('labview-output', {
         category: 'LabVIEW',
         defaults: {
-            labviewConfig: {value:"", type:"labview-config"},
-            topic: {value:"",required:true},
+            labviewConfig: { value: "", type: "labview-config" },
+            topic: { value: "", required: true },
         },
-        label: function() {
-            return this.topic||"LabVIEW Output";;
-        },        
-        inputs:1,
-        outputs:0,
+        label: function () {
+            return this.topic || "LabVIEW Output";;
+        },
+        inputs: 1,
+        outputs: 0,
         color: "#ffdd22",
         icon: "LV.png",
     });
