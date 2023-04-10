@@ -14,42 +14,33 @@ module.exports = function (RED) {
     // creating a udp server
     const server = udp.createSocket("udp4");
     if (this.listeningPort) {
-      try {
-        server.bind(this.listeningPort);
+      server.bind(this.listeningPort);
 
-        // emits on new datagram msg
-        server.on("message", function (msg, info) {
-          const payload = JSON.parse(msg.toString());
-          console.log(payload);
-          serverEmitter.emit(payload.topic, payload);
-        });
+      // emits on new datagram msg
+      server.on("message", function (msg, info) {
+        const payload = JSON.parse(msg.toString());
+        serverEmitter.emit(payload.topic, payload);
+      });
 
-        //emits after the socket is closed using socket.close();
-        server.on("close", function () {
-          console.log("Socket is closed !");
-        });
-      } catch (err) {
-        node.error(err);
-      }
+      //emits after the socket is closed using socket.close();
+      server.on("error", function (err) {
+        server.close();
+        node.error(`server error:\n${err.stack}`);
+      });
     }
 
     // creating a udp client
     const client = udp.createSocket("udp4");
     if (n.host && n.port) {
-      console.log(n.host, n.port);
       clientEmittter.removeAllListeners("toClient");
       clientEmittter.addListener("toClient", function (data) {
-        try {
-          //sending msg
-          client.send(data, n.port, n.host, function (error) {
-            if (error) {
-              client.close();
-            }
-          });
-        } catch (err) {
-          console.log("ErrorMessage", err);
-          node.error(err);
-        }
+        //sending msg
+        client.send(data, n.port, n.host, function (error) {
+          if (error) {
+            client.close();
+            node.error(error);
+          }
+        });
       });
     }
   }
@@ -72,6 +63,7 @@ module.exports = function (RED) {
       try {
         serverEmitter.removeAllListeners(this.topic);
         serverEmitter.addListener(this.topic, function (data) {
+          msg.topic = n.topic;
           msg.payload = RED.util.getMessageProperty(data, form);
           node.send(msg);
         });
@@ -96,7 +88,6 @@ module.exports = function (RED) {
     this.on("input", function (msg, send, done) {
       if (this.labviewConfig) {
         msg.topic = this.topic;
-        console.log("toClient", msg);
         const bufferData = Buffer(JSON.stringify(msg));
         clientEmittter.emit("toClient", bufferData);
       }
